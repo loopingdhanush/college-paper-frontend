@@ -19,25 +19,24 @@ import {
 } from "@/components/ui/select"
 
 export default function FilterDialog({ onApply }) {
-
+  const [open, setOpen] = useState(false)
   const [department, setDepartment] = useState("")
   const [year, setYear] = useState("")
   const [type, setType] = useState("")
-  const [subject, setSubject] = useState("")
 
   const handleApply = () => {
-    if (onApply) {
-      onApply({ department, year, type, subject })
-    }
+    const filters = { department, year, type }
+    onApply?.(filters)
+    setOpen(false)
   }
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant="outline">Filters</Button>
       </DialogTrigger>
 
-      <DialogContent className="sm:max-w-[400px]">
+      <DialogContent className="sm:max-w-[400px]" aria-describedby={undefined}>
         <DialogHeader>
           <DialogTitle>Filter Papers</DialogTitle>
         </DialogHeader>
@@ -61,6 +60,17 @@ export default function FilterDialog({ onApply }) {
               <SelectItem value="2026">2026</SelectItem>
               <SelectItem value="2025">2025</SelectItem>
               <SelectItem value="2024">2024</SelectItem>
+            </SelectContent>
+          </Select>
+
+          <Select onValueChange={setType}>
+            <SelectTrigger>
+              <SelectValue placeholder="Type" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="CA1">CA1</SelectItem>
+              <SelectItem value="CA2">CA2</SelectItem>
+              <SelectItem value="SEMESTER">SEMESTER</SelectItem>
             </SelectContent>
           </Select>
 

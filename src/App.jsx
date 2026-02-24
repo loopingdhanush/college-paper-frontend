@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
 import Dashboard from "./pages/Dashboard"
 import QuestionBank from "./pages/QuestionBank"
+import Login from "./pages/Login"
 
 function App() {
   return (
@@ -10,6 +11,7 @@ function App() {
           <Route index element={<Navigate to="question-bank" />} />
           <Route path="question-bank" element={<QuestionBank />} />
         </Route>
+        <Route path="/login" element={<Login/>}></Route>
       </Routes>
     </BrowserRouter>
   )

@@ -23,7 +23,7 @@ export default function QuestionBank() {
       const query = new URLSearchParams(filters).toString()
 
       const res = await api.get(
-        `/papers/approved${query ? `?${query}` : ""}`
+        `/papers/${query ? `?${query}` : ""}`
       )
 
       setPapers(res.data)
@@ -40,14 +40,22 @@ export default function QuestionBank() {
   }, [filters])
 
   const handleDownload = async (id) => {
-    try {
-      const res = await api.get(`/papers/download/${id}`)
-      window.open(res.data.fileURL, "_blank")
-      fetchPapers()
-    } catch (error) {
-      console.error(error)
-    }
+  try {
+    const res = await api.get(`/papers/download/${id}`)
+    window.location.href = res.data.fileURL
+  } catch (error) {
+    console.error(error)
   }
+}
+
+const handleDelete = async (id) =>{
+  try {
+    const res = await api.delete(`/papers/${id}`)
+    fetchPapers()
+  } catch (error) {
+    console.error(error)
+  }
+}
 
   return (
     <>
@@ -91,23 +99,18 @@ export default function QuestionBank() {
             No papers found.
           </div>
         ) : (
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <div className="grid gap-6 sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3">
             {papers.map((paper) => (
               <Card
                 key={paper._id}
                 className="hover:shadow-lg transition"
               >
-                <CardContent className="p-6 space-y-4">
+                <CardContent className="space-y-2">
 
-                  <div>
                     <h3 className="font-semibold text-lg">
                       {paper.subject}
                     </h3>
-                    <p className="text-sm text-muted-foreground">
-                      {paper.year}
-                    </p>
-                  </div>
-
+                    
                   <div className="flex gap-2 flex-wrap">
                     <Badge variant="secondary">
                       {paper.department}
@@ -115,13 +118,18 @@ export default function QuestionBank() {
                     <Badge>
                       {paper.type}
                     </Badge>
+                    <p className="text-sm text-muted-foreground">
+                      {paper.year}
+                    </p>
                   </div>
 
                   <div className="flex items-center justify-between pt-4">
+
                     <span className="text-sm text-muted-foreground">
                       {paper.downloads} downloads
                     </span>
 
+                    <div className="space-x-2">
                     <Button
                       size="sm"
                       onClick={() =>
@@ -130,6 +138,17 @@ export default function QuestionBank() {
                     >
                       Download
                     </Button>
+
+                    <Button
+                    variant="destructive"
+                      size="sm"
+                      onClick={() =>
+                        handleDelete(paper._id)
+                      }
+                    >
+                      Delete
+                    </Button>
+                    </div>
                   </div>
 
                 </CardContent>
