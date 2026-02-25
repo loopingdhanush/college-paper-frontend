@@ -1,17 +1,57 @@
+import { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
+
 import Dashboard from "./pages/Dashboard"
 import QuestionBank from "./pages/QuestionBank"
 import Login from "./pages/Login"
+import Pending from "./pages/Pending";
+import AuthWrapper from "./components/AuthWrapper";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Dashboard />}>
+
+        <Route path="/" element={
+          <AuthWrapper>
+            {(admin) => <Dashboard admin={admin}/>}
+            </AuthWrapper>
+          }>
+
           <Route index element={<Navigate to="question-bank" />} />
-          <Route path="question-bank" element={<QuestionBank />} />
-        </Route>
-        <Route path="/login" element={<Login/>}></Route>
+          
+          <Route path="question-bank" element={
+            <AuthWrapper>
+            {(admin) => <QuestionBank admin={admin}/>}
+            </AuthWrapper>
+            }/>
+
+          <Route
+            path="pending"
+            element={
+              <AuthWrapper>
+                {(admin) =>
+                  admin ? <Pending /> : <Navigate to="/" />
+                }
+                </AuthWrapper>
+            }/>
+
+            <Route
+            path="allpapers"
+            element={
+              <AuthWrapper>
+                {(admin) =>
+                  admin ? <Pending /> : <Navigate to="/" />
+                }
+                </AuthWrapper>
+            }/>
+
+          </Route>
+
+          
+
+          <Route path="/login" element={<Login/>}></Route>
+
       </Routes>
     </BrowserRouter>
   )

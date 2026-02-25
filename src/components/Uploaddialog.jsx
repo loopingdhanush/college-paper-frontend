@@ -107,6 +107,7 @@ export default function UploadDialog({ onSuccess }) {
               <SelectItem value="CA1">CA1</SelectItem>
               <SelectItem value="CA2">CA2</SelectItem>
               <SelectItem value="Tutorial">Tutorial</SelectItem>
+              <SelectItem value="Practice">Practice</SelectItem>
               <SelectItem value="Semester">Semester</SelectItem>
             </SelectContent>
           </Select>

@@ -18,14 +18,31 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 
+import { Input } from "@/components/ui/input"
+
 export default function FilterDialog({ onApply }) {
   const [open, setOpen] = useState(false)
   const [department, setDepartment] = useState("")
   const [year, setYear] = useState("")
   const [type, setType] = useState("")
+  const [subject, setSubject] = useState("")
 
   const handleApply = () => {
-    const filters = { department, year, type }
+    const filters = { department, year, type, subject }
+    onApply?.(filters)
+    setDepartment("")
+    setYear("")
+    setType("")
+    setSubject("")
+    setOpen(false)
+  }
+
+  const handleReset = () =>{
+    setDepartment("")
+    setYear("")
+    setType("")
+    setSubject("")
+    const filters = { department, year, type, subject }
     onApply?.(filters)
     setOpen(false)
   }
@@ -70,14 +87,23 @@ export default function FilterDialog({ onApply }) {
             <SelectContent>
               <SelectItem value="CA1">CA1</SelectItem>
               <SelectItem value="CA2">CA2</SelectItem>
-              <SelectItem value="SEMESTER">SEMESTER</SelectItem>
+              <SelectItem value="Tutorial">Tutorial</SelectItem>
+              <SelectItem value="Practice">Practice</SelectItem>
+              <SelectItem value="Semester">Semester</SelectItem>
             </SelectContent>
           </Select>
+
+          <Input
+            placeholder="Subject"
+            value={subject}
+            onChange={(e) => setSubject(e.target.value)}
+          />
 
         </div>
 
         <DialogFooter>
           <Button onClick={handleApply}>Apply</Button>
+          <Button onClick={handleReset}>Reset Filter</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
