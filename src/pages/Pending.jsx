@@ -11,17 +11,14 @@ export default function Pending() {
   const [papers, setPapers] = useState([])
   const [loading, setLoading] = useState(true)
 
-  // 🔄 Fetch papers
+  // Fetch papers
   const fetchPapers = async () => {
     try {
       setLoading(true)
-
       const res = await api.get(
-        '/papers/pendingpapers'
+        'papers/admin/pending'
       )
-
       setPapers(res.data)
-
     } catch (error) {
       console.error(error)
     } finally {
@@ -35,7 +32,7 @@ export default function Pending() {
 
   const handleDownload = async (id) => {
   try {
-    const res = await api.get(`/papers/download/${id}`)
+    const res = await api.get(`/papers/${id}/download`)
     window.location.href = res.data.fileURL
   } catch (error) {
     console.error(error)
@@ -53,7 +50,7 @@ const handleDelete = async (id) =>{
 
 const handleApprove = async (id) =>{
   try {
-    const res = await api.patch(`/papers/approve/${id}`)
+    const res = await api.patch(`/papers/${id}/approve`)
     fetchPapers()
   } catch (error) {
     console.error(error)

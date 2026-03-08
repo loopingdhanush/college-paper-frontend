@@ -51,7 +51,7 @@ export default function UploadDialog() {
       formData.append("subject", subject)
       formData.append("file", file)
 
-      await api.post("/papers/upload/", formData)
+      await api.post("/papers/", formData)
 
       setOpen(false)
       setDepartment("")

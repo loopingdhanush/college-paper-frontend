@@ -11,7 +11,7 @@ export const checkAuth = async () => {
 
 export const checkAdmin = async () => {
   try {
-    await api.get("/papers/admin-test");
+    await api.get("/papers/admin/test");
     return true;
   } catch {
     return false;

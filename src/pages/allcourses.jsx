@@ -20,7 +20,7 @@ export default function allcourses({admin}) {
   
 
 
-  // 🔄 Fetch papers
+  // Fetch papers
   const fetchPapers = async () => {
     try {
       setLoading(true)
@@ -28,7 +28,7 @@ export default function allcourses({admin}) {
       const query = new URLSearchParams(filters).toString()
 
       const res = await api.get(
-        `/papers/${query ? `?${query}` : ""}`
+        `papers/${query ? `?${query}` : ""}`
       )
       console.log(res.data)
       setPapers(res.data)
@@ -45,33 +45,32 @@ export default function allcourses({admin}) {
     
   }, [filters])
 
-  const handleDownload = async (paper) => {
+const handleDownload = async (paper) => {
   try {
+    const id = paper._id
 
-    
-    const id = (paper._id)
-    const res = await api.get(`/papers/download/${id}`)
-    
+    const res = await api.get(`/papers/${id}/download`)
     const fileURL = res.data.fileURL
 
-    
     const fileResponse = await fetch(fileURL)
-
     const blob = await fileResponse.blob()
 
-    
-    const url = window.URL.createObjectURL(blob)
+    const fileName =
+      `${paper.department}_${paper.subject}_${paper.type}_${paper.year}`
+        .replace(/\s+/g, "_")
+        .toUpperCase() + ".pdf"
+
+    const blobUrl = window.URL.createObjectURL(blob)
 
     const link = document.createElement("a")
-    link.href = url
-    const fileName = `${paper.subject.replace(/\s+/g, "_").toUpperCase()}_${paper.type.toUpperCase()}_${paper.year}.pdf`;
-    link.download = fileName;
+    link.href = blobUrl
+    link.setAttribute("download", fileName)
 
     document.body.appendChild(link)
     link.click()
 
-    link.remove()
-    window.URL.revokeObjectURL(url)
+    document.body.removeChild(link)
+    window.URL.revokeObjectURL(blobUrl)
 
   } catch (error) {
     console.error(error)
@@ -80,7 +79,7 @@ export default function allcourses({admin}) {
 
 const handleDelete = async (id) =>{
   try {
-    const res = await api.delete(`/papers/${id}`)
+    const res = await api.delete(`papers/${id}`)
     fetchPapers()
   } catch (error) {
     console.error(error)

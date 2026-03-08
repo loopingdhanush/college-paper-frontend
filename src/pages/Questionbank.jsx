@@ -13,11 +13,11 @@ export default function QuestionBank({admin}) {
   const [loading, setLoading] = useState(true)
 
 
-  // 🔄 Fetch papers
-  const fetchPapers = async () => {
+  // Fetch courses
+  const fetchCourses = async () => {
     try {
       setLoading(true)
-      const res = await api.get("papers/allcourses")
+      const res = await api.get("papers/courses")
       setPapers(res.data.subjects)
     } catch (error) {
       console.error(error)
@@ -27,12 +27,12 @@ export default function QuestionBank({admin}) {
   }
 
   useEffect(() => {
-    fetchPapers()
+    fetchCourses()
     
   },[])
 
   const handleView = (subject) =>{
-    navigate(`/filter?subject=${subject}`);
+    navigate(`/filter/?subject=${subject}`);
   };
 
 
