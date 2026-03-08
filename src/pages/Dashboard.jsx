@@ -1,4 +1,4 @@
-
+import api from "@/lib/api";
 import {
   SidebarProvider,
   Sidebar,
@@ -10,6 +10,7 @@ import {
   SidebarMenuButton,
   SidebarInset,
 } from "@/components/ui/sidebar"
+import UploadDialog from "@/components/Uploaddialog"
 
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
@@ -18,9 +19,15 @@ import { Outlet, NavLink } from "react-router-dom"
 export default function Dashboard({admin}) {
   const email = localStorage.getItem("email")
 
-  function logout() {
-    localStorage.clear()
-    window.location.href = "/login"
+  async function logout() {
+    try {
+      await api.post("/auth/logout");
+
+      window.location.href = "/login";
+
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
   }
 
   return (
@@ -56,9 +63,13 @@ export default function Dashboard({admin}) {
           <SidebarContent className="px-2 py-4">
             
             <SidebarMenu>
+
+              
+
               <SidebarMenuItem>
                 <p className="text-sm font-semibold pl-1 mb-2">Resources</p>
-                <NavLink to="/question-bank">
+
+                <NavLink to="/questionbank">
                   {({ isActive }) => (
                     <SidebarMenuButton  isActive={isActive}
                       className="rounded-lg w-full cursor-pointer mb-2">
@@ -67,8 +78,21 @@ export default function Dashboard({admin}) {
                   )}
                 </NavLink>
 
+                <NavLink to="/filter">
+                  {({ isActive }) => (
+                    <SidebarMenuButton  isActive={isActive}
+                      className="rounded-lg w-full cursor-pointer mb-2">
+                      Filter
+                    </SidebarMenuButton>
+                  )}
+
+                </NavLink>
+                
+
+                <UploadDialog/>
+
                 {admin &&(   
-                <p className="text-sm font-semibold pl-1 mb-2">Administration</p>)}
+                <p className="text-sm font-semibold pl-1 mb-2 mt-2">Administration</p>)}
 
                 {admin &&(   
                 <NavLink to="/pending">

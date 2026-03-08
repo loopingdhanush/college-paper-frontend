@@ -1,36 +1,37 @@
 import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
-import { checkAdmin } from "@/lib/auth";
+import { checkAdmin, checkAuth } from "@/lib/auth";
 
 export default function AuthWrapper({ children }) {
 
   const [loading, setLoading] = useState(true);
+  const [loggedIn, setLoggedIn] = useState(false);
   const [admin, setAdmin] = useState(false);
-
-  const token = localStorage.getItem("token");
 
   useEffect(() => {
     const verify = async () => {
-      if (!token) {
+
+      const isLoggedIn = await checkAuth();
+
+      if (!isLoggedIn) {
+        setLoggedIn(false);
         setLoading(false);
         return;
       }
+
       const isAdmin = await checkAdmin();
+
+      setLoggedIn(true);
       setAdmin(isAdmin);
       setLoading(false);
-
     };
+
     verify();
   }, []);
 
-  if (!token) {
-    return <Navigate to="/login" />;
-  }
+  if (loading) return null;
 
-  if (loading) {
-    return <div className="p-10">Loading...</div>;
-  }
+  if (!loggedIn) return <Navigate to="/login" />;
 
   return children(admin);
-
 }

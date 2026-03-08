@@ -1,34 +1,24 @@
 import { useEffect, useState } from "react"
 import api from "@/lib/api"
-
+import { useNavigate } from "react-router-dom";
 import { SidebarTrigger } from "@/components/ui/sidebar"
 import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 
-import UploadDialog from "@/components/Uploaddialog"
-import FilterDialog from "@/components/Filterdialog"
+
 
 export default function QuestionBank({admin}) {
-
+  const navigate = useNavigate();
   const [papers, setPapers] = useState([])
   const [loading, setLoading] = useState(true)
-  const [filters, setFilters] = useState({})
+
 
   // 🔄 Fetch papers
-  
   const fetchPapers = async () => {
     try {
       setLoading(true)
-      console.log(filters)
-      const query = new URLSearchParams(filters).toString()
-
-      const res = await api.get(
-        `/papers/${query ? `?${query}` : ""}`
-      )
-
-      setPapers(res.data)
-
+      const res = await api.get("papers/allcourses")
+      setPapers(res.data.subjects)
     } catch (error) {
       console.error(error)
     } finally {
@@ -39,63 +29,26 @@ export default function QuestionBank({admin}) {
   useEffect(() => {
     fetchPapers()
     
-  }, [filters])
+  },[])
 
-  const handleDownload = async (paper) => {
-  try {
+  const handleView = (subject) =>{
+    navigate(`/filter?subject=${subject}`);
+  };
 
-    // Step 1: Get file URL from backend
-    const id = (paper._id)
-    const res = await api.get(`/papers/download/${id}`)
-    
-    const fileURL = res.data.fileURL
-
-    // Step 2: Fetch actual PDF
-    const fileResponse = await fetch(fileURL)
-
-    const blob = await fileResponse.blob()
-
-    // Step 3: Download as PDF
-    const url = window.URL.createObjectURL(blob)
-
-    const link = document.createElement("a")
-    link.href = url
-    const fileName = `${paper.subject.replace(/\s+/g, "_").toUpperCase()}_${paper.type.toUpperCase()}_${paper.year}.pdf`;
-    link.download = fileName;
-
-    document.body.appendChild(link)
-    link.click()
-
-    link.remove()
-    window.URL.revokeObjectURL(url)
-
-  } catch (error) {
-    console.error(error)
-  }
-}
-
-const handleDelete = async (id) =>{
-  try {
-    const res = await api.delete(`/papers/${id}`)
-    fetchPapers()
-  } catch (error) {
-    console.error(error)
-  }
-}
 
   return (
     <>
       {/* Mobile Header */}
       <div className="flex items-center gap-4 border-b px-6 py-4 md:hidden">
         <SidebarTrigger className="h-9 w-9 rounded-lg border bg-background shadow-sm hover:bg-accent transition" />
-        <h2 className="text-lg font-semibold">Question Bank</h2>
+        <h2 className="text-lg font-semibold">Courses</h2>
       </div>
 
       <div className="px-10 py-8 space-y-8">
 
         {/* Desktop Title */}
         <h1 className="text-3xl font-bold tracking-tight hidden md:block">
-          Question Bank
+          Courses
         </h1>
 
         <p className="text-muted-foreground">
@@ -104,82 +57,41 @@ const handleDelete = async (id) =>{
 
         {/* Filter + Upload Row */}
         <div className="flex justify-between items-center">
-
           
-
-          <FilterDialog
-            onApply={(data) => setFilters(data)}
-          />
-
-          <UploadDialog
-            onSuccess={fetchPapers}
-          />
 
         </div>
 
         {/* Papers Grid */}
         {loading ? (
           <div className="text-muted-foreground">
-            Loading papers...
+            Loading Courses...
           </div>
         ) : papers.length === 0 ? (
           <div className="text-muted-foreground">
-            No papers found.
+            No Courses found.
           </div>
         ) : (
-          <div className="grid gap-6 sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3">
+          <div className="grid gap-4 sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3">
             {papers.map((paper) => (
               <Card
-                key={paper._id}
-                className="hover:shadow-lg transition"
+                key={paper}
+                className="hover:shadow-lg transition duration-200"
               >
-                <CardContent className="space-y-2">
+                <CardContent className="flex items-center justify-between ">
 
-                    <h3 className="font-semibold text-lg">
-                      {paper.subject}
-                    </h3>
-                    
-                  <div className="flex gap-2 flex-wrap">
-                    <Badge variant="secondary">
-                      {paper.department}
-                    </Badge>
-                    <Badge>
-                      {paper.type}
-                    </Badge>
-                    <p className="text-sm text-muted-foreground">
-                      {paper.year}
-                    </p>
-                  </div>
+                  {/* Subject Name */}
+                  <h3 className="font-semibold text-md">
+                    {paper}
+                  </h3>
 
-                  <div className="flex items-center justify-between pt-4">
-
-                    <span className="text-sm text-muted-foreground">
-                      {paper.downloads} downloads
-                    </span>
-
-                    <div className="space-x-2">
-                    <Button
-                      size="sm"
-                      onClick={() =>
-                        handleDownload(paper)
-                      }
-                    >
-                      Download
-                    </Button>
-                    
-                    {admin && (
-                    <Button
-                    variant="destructive"
-                      size="sm"
-                      onClick={() =>
-                        handleDelete(paper._id)
-                      }
-                    >
-                      Delete
-                    </Button>)}
-
-                    </div>
-                  </div>
+                  {/* View Button */}
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handleView(paper)}
+                  >
+                    View
+                  </Button>
 
                 </CardContent>
               </Card>

@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { auth } from "../lib/firebase";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import  api  from "@/lib/api";
 
 import { Button } from "@/components/ui/button"
 import {
@@ -21,11 +22,14 @@ export default function Login() {
       const result = await signInWithPopup(auth, provider);
 
       const token = await result.user.getIdToken();
-
-      localStorage.setItem("token", token);
+      console.log("logging in frontend")
+      
+      await api.post("/auth/login", { token }, { withCredentials: true });
+      console.log(result)
       localStorage.setItem("email", result.user.email);
 
       navigate("/");
+      console.log("path changhed")
     } catch (error) {
       console.error("Login error:", error);
     }

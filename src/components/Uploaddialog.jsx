@@ -1,5 +1,8 @@
 import { useState } from "react"
 import api from "@/lib/api"
+import { useNavigate } from "react-router-dom"
+
+import { SidebarMenuButton } from "./ui/sidebar"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -21,7 +24,8 @@ import {
 
 import { Input } from "@/components/ui/input"
 
-export default function UploadDialog({ onSuccess }) {
+export default function UploadDialog() {
+  const navigate = useNavigate()
 
   const [department, setDepartment] = useState("")
   const [year, setYear] = useState("")
@@ -56,7 +60,7 @@ export default function UploadDialog({ onSuccess }) {
       setSubject("")
       setFile(null)
 
-      if (onSuccess) onSuccess()
+      navigate("/filter")
 
     } catch (error) {
       console.error(error)
@@ -67,12 +71,14 @@ export default function UploadDialog({ onSuccess }) {
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={setOpen} className="mb-2">
       <DialogTrigger asChild>
-        <Button>Upload</Button>
+        <SidebarMenuButton>
+        Upload
+        </SidebarMenuButton>
       </DialogTrigger>
 
-      <DialogContent className="sm:max-w-[500px]">
+      <DialogContent className="sm:max-w-[500px]" aria-describedby={undefined}>
         <DialogHeader>
           <DialogTitle>Upload Paper</DialogTitle>
         </DialogHeader>
