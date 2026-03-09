@@ -74,7 +74,7 @@ export default function UploadDialog() {
     <Dialog open={open} onOpenChange={setOpen} className="mb-2">
       <DialogTrigger asChild>
         <SidebarMenuButton>
-        Upload
+        <img width="22" height="22" src="https://img.icons8.com/material/24/circled-up--v1.png" alt="circled-up--v1"/>Upload
         </SidebarMenuButton>
       </DialogTrigger>
 

@@ -40,13 +40,11 @@ export default function Dashboard({admin}) {
           {/* Header */}
           <SidebarHeader className="p-4">
             <div className="flex flex- items-center gap-2">
-              <div className="w-9 h-9 rounded-lg bg-primary text-primary-foreground flex items-center justify-center font-bold">
-                T
-              </div>
+              
 
               <div>
                 <h1 className="text-lg font-semibold leading-none">
-                  Teched
+                  TechED
                 </h1>
                 {admin ? (<p className="text-xs text-muted-foreground">
                   Admin Panel
@@ -73,7 +71,7 @@ export default function Dashboard({admin}) {
                   {({ isActive }) => (
                     <SidebarMenuButton  isActive={isActive}
                       className="rounded-lg w-full cursor-pointer mb-2">
-                      Question Bank
+                      <img width="22" height="22" src="https://img.icons8.com/material/48/book--v3.png" alt="book--v3"/>Question Bank
                     </SidebarMenuButton>
                   )}
                 </NavLink>
@@ -82,7 +80,7 @@ export default function Dashboard({admin}) {
                   {({ isActive }) => (
                     <SidebarMenuButton  isActive={isActive}
                       className="rounded-lg w-full cursor-pointer mb-2">
-                      Filter
+                      <img width="22" height="22" src="https://img.icons8.com/material/24/search-property--v1.png" alt="search-property--v1"/>Filter
                     </SidebarMenuButton>
                   )}
 
@@ -99,7 +97,7 @@ export default function Dashboard({admin}) {
                   {({ isActive }) => (
                     <SidebarMenuButton isActive={isActive}
                       className="rounded-lg w-full cursor-pointer">
-                      Pending Papers
+                      <img width="22" height="22" src="https://img.icons8.com/material/24/hourglass-sand-top.png" alt="hourglass-sand-top"/>Pending Papers
                     </SidebarMenuButton>
                   )}
                 </NavLink>)}
