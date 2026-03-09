@@ -91,6 +91,7 @@ export default function UploadDialog() {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="IT">IT</SelectItem>
+              <SelectItem value="CSE">CSE</SelectItem>
             </SelectContent>
           </Select>
 

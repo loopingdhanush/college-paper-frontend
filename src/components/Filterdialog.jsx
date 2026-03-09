@@ -66,6 +66,7 @@ export default function FilterDialog({ onApply }) {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="IT">IT</SelectItem>
+              <SelectItem value="CSE">CSE</SelectItem>
             </SelectContent>
           </Select>
 
