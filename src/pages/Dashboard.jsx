@@ -1,20 +1,21 @@
 import api from "@/lib/api";
 import {
-  SidebarProvider,
   Sidebar,
-  SidebarHeader,
   SidebarContent,
   SidebarFooter,
+  SidebarHeader,
+  SidebarInset,
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
-  SidebarInset,
+  SidebarProvider,
 } from "@/components/ui/sidebar"
-import UploadDialog from "@/components/Uploaddialog"
-
-import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
-import { Outlet, NavLink } from "react-router-dom"
+import { Button } from "@/components/ui/button"
+import { GraduationCap, BookOpen, BookMarked, Clock, LogOut } from "lucide-react"
+import { NavLink } from "react-router-dom"
+import { Outlet } from "react-router-dom"
+import UploadDialog from "@/components/Uploaddialog"
 
 export default function Dashboard({admin}) {
   const email = localStorage.getItem("email")
@@ -32,108 +33,120 @@ export default function Dashboard({admin}) {
 
   return (
     <SidebarProvider>
-      <div className="flex w-full">
-
-        {/* Sidebar */}
-        <Sidebar className="border-r bg-muted/30">
-
-          {/* Header */}
-          <SidebarHeader className="p-4">
-            <div className="flex flex- items-center gap-2">
-              
-
-              <div>
-                <h1 className="text-lg font-semibold leading-none">
-                  TechED
-                </h1>
-                {admin ? (<p className="text-xs text-muted-foreground">
-                  Admin Panel
-                </p>) : (<p className="text-xs text-muted-foreground">
-                  Students Panel
-                </p>)}
-              </div>
+    <div className="flex w-full">
+  
+      {/* Sidebar */}
+      <Sidebar className="border-r">
+  
+        {/* Header */}
+        <SidebarHeader className="p-4">
+          <div className="flex items-center gap-2.5">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground shrink-0">
+              <GraduationCap className="h-4 w-4" />
             </div>
-          </SidebarHeader>
-
-          <Separator />
-
-          {/* Navigation */}
-          <SidebarContent className="px-2 py-4">
-            
-            <SidebarMenu>
-
-              
-
-              <SidebarMenuItem>
-                <p className="text-sm font-semibold pl-1 mb-2">Resources</p>
-
-                <NavLink to="/questionbank">
-                  {({ isActive }) => (
-                    <SidebarMenuButton  isActive={isActive}
-                      className="rounded-lg w-full cursor-pointer mb-2">
-                      <img width="22" height="22" src="https://img.icons8.com/material/48/book--v3.png" alt="book--v3"/>Question Bank
-                    </SidebarMenuButton>
-                  )}
-                </NavLink>
-
-                <NavLink to="/filter">
-                  {({ isActive }) => (
-                    <SidebarMenuButton  isActive={isActive}
-                      className="rounded-lg w-full cursor-pointer mb-2">
-                      <img width="22" height="22" src="https://img.icons8.com/material/24/search-property--v1.png" alt="search-property--v1"/>Filter
-                    </SidebarMenuButton>
-                  )}
-
-                </NavLink>
-                
-
-                <UploadDialog/>
-
-                {admin &&(   
-                <p className="text-sm font-semibold pl-1 mb-2 mt-2">Administration</p>)}
-
-                {admin &&(   
-                <NavLink to="/pending">
-                  {({ isActive }) => (
-                    <SidebarMenuButton isActive={isActive}
-                      className="rounded-lg w-full cursor-pointer">
-                      <img width="22" height="22" src="https://img.icons8.com/material/24/hourglass-sand-top.png" alt="hourglass-sand-top"/>Pending Papers
-                    </SidebarMenuButton>
-                  )}
-                </NavLink>)}
-
-              </SidebarMenuItem>
-
-              
-            </SidebarMenu>
-          </SidebarContent>
-
-          {/* Footer */}
-          <SidebarFooter className="p-4">
-
-            
-            <Button
-              variant="ghost"
-              className="w-full justify-start text-muted-foreground hover:text-destructive cursor-pointer"
-              onClick={logout}
-            >
-              Logout
-            </Button>
-
-            <Button variant="outline" className="w-full truncate">
-              {email}
-            </Button>
-          </SidebarFooter>
-        </Sidebar>
-
-        {/* Main Content */}
-        <SidebarInset>
-          <div className="min-h-screen bg-background">
-            <Outlet />
+            <div>
+              <p className="text-sm font-semibold leading-none">TechED</p>
+              <p className="text-xs text-muted-foreground mt-0.5">
+                {admin ? "Admin Panel" : "Student Panel"}
+              </p>
+            </div>
           </div>
-        </SidebarInset>
-
-      </div>
-    </SidebarProvider>
+        </SidebarHeader>
+  
+        <Separator />
+  
+        {/* Navigation */}
+        <SidebarContent className="p-2">
+  
+          <SidebarMenu>
+  
+            {/* Resources */}
+            <div className="px-2 pt-3 pb-1">
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">
+                Resources
+              </p>
+            </div>
+  
+            <SidebarMenuItem>
+              <NavLink to="/questionbank">
+                {({ isActive }) => (
+                  <SidebarMenuButton isActive={isActive} className="rounded-lg w-full cursor-pointer">
+                    <BookOpen className="h-4 w-4" />
+                    Question Bank
+                  </SidebarMenuButton>
+                )}
+              </NavLink>
+            </SidebarMenuItem>
+  
+            <SidebarMenuItem>
+              <NavLink to="/filter">
+                {({ isActive }) => (
+                  <SidebarMenuButton isActive={isActive} className="rounded-lg w-full cursor-pointer">
+                    <BookMarked className="h-4 w-4" />
+                    Courses
+                  </SidebarMenuButton>
+                )}
+              </NavLink>
+            </SidebarMenuItem>
+  
+            <SidebarMenuItem>
+              <UploadDialog />
+            </SidebarMenuItem>
+  
+            {/* Admin */}
+            {admin && (
+              <>
+                <div className="px-2 pt-4 pb-1">
+                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">
+                    Administration
+                  </p>
+                </div>
+  
+                <SidebarMenuItem>
+                  <NavLink to="/pending">
+                    {({ isActive }) => (
+                      <SidebarMenuButton isActive={isActive} className="rounded-lg w-full cursor-pointer">
+                        <Clock className="h-4 w-4" />
+                        Pending Papers
+                      </SidebarMenuButton>
+                    )}
+                  </NavLink>
+                </SidebarMenuItem>
+              </>
+            )}
+  
+          </SidebarMenu>
+        </SidebarContent>
+  
+        {/* Footer */}
+        <SidebarFooter className="p-3">
+          <Separator className="mb-3" />
+  
+          <div className="rounded-lg border bg-muted/40 px-3 py-2 mb-2">
+            <p className="text-xs text-muted-foreground truncate">{email}</p>
+          </div>
+  
+          <Button
+            variant="ghost"
+            size="sm"
+            className="w-full justify-start text-muted-foreground hover:text-destructive hover:bg-destructive/10 gap-2"
+            onClick={logout}
+          >
+            <LogOut className="h-4 w-4" />
+            Log out
+          </Button>
+  
+        </SidebarFooter>
+      </Sidebar>
+  
+      {/* Main Content */}
+      <SidebarInset>
+        <div className="min-h-screen bg-background">
+          <Outlet />
+        </div>
+      </SidebarInset>
+  
+    </div>
+  </SidebarProvider>
   )
 }

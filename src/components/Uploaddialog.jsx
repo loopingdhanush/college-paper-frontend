@@ -2,8 +2,6 @@ import { useState } from "react"
 import api from "@/lib/api"
 import { useNavigate } from "react-router-dom"
 
-import { SidebarMenuButton } from "./ui/sidebar"
-
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -13,7 +11,6 @@ import {
   DialogFooter,
   DialogTrigger,
 } from "@/components/ui/dialog"
-
 import {
   Select,
   SelectTrigger,
@@ -21,8 +18,9 @@ import {
   SelectItem,
   SelectValue,
 } from "@/components/ui/select"
-
 import { Input } from "@/components/ui/input"
+import { SidebarMenuButton } from "@/components/ui/sidebar"
+import { Upload, FileUp, Loader2 } from "lucide-react"
 
 export default function UploadDialog() {
   const navigate = useNavigate()
@@ -71,74 +69,118 @@ export default function UploadDialog() {
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen} className="mb-2">
-      <DialogTrigger asChild>
-        <SidebarMenuButton>
-        <img width="22" height="22" src="https://img.icons8.com/material/24/circled-up--v1.png" alt="circled-up--v1"/>Upload
-        </SidebarMenuButton>
-      </DialogTrigger>
+    <Dialog open={open} onOpenChange={setOpen}>
+  <DialogTrigger asChild>
+    <SidebarMenuButton>
+      <Upload className="h-4 w-4" />
+      Upload
+    </SidebarMenuButton>
+  </DialogTrigger>
 
-      <DialogContent className="sm:max-w-[500px]" aria-describedby={undefined}>
-        <DialogHeader>
-          <DialogTitle>Upload Paper</DialogTitle>
-        </DialogHeader>
+  <DialogContent className="sm:max-w-[420px] p-0 gap-0 overflow-hidden" aria-describedby={undefined}>
 
-        <div className="grid gap-4 py-4">
+    {/* Header */}
+    <DialogHeader className="p-5 border-b">
+      <DialogTitle className="text-sm font-semibold tracking-tight">Upload Paper</DialogTitle>
+    </DialogHeader>
 
-          <Select onValueChange={setDepartment}>
-            <SelectTrigger>
-              <SelectValue placeholder="Department" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="IT">IT</SelectItem>
-              <SelectItem value="CSE">CSE</SelectItem>
-            </SelectContent>
-          </Select>
+    {/* Fields */}
+    <div className="p-5 space-y-4">
 
-          <Select onValueChange={setYear}>
-            <SelectTrigger>
-              <SelectValue placeholder="Year" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="2026">2026</SelectItem>
-              <SelectItem value="2025">2025</SelectItem>
-              <SelectItem value="2024">2024</SelectItem>
-            </SelectContent>
-          </Select>
+      <div className="space-y-1.5">
+        <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Department</label>
+        <Select onValueChange={setDepartment} value={department}>
+          <SelectTrigger className="text-sm">
+            <SelectValue placeholder="Select department" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="IT">IT</SelectItem>
+            <SelectItem value="CSE">CSE</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
 
-          <Select onValueChange={setType}>
-            <SelectTrigger>
-              <SelectValue placeholder="Type" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="CA1">CA1</SelectItem>
-              <SelectItem value="CA2">CA2</SelectItem>
-              <SelectItem value="Tutorial">Tutorial</SelectItem>
-              <SelectItem value="Practice">Practice</SelectItem>
-              <SelectItem value="Semester">Semester</SelectItem>
-            </SelectContent>
-          </Select>
+      <div className="space-y-1.5">
+        <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Year</label>
+        <Select onValueChange={setYear} value={year}>
+          <SelectTrigger className="text-sm">
+            <SelectValue placeholder="Select year" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="2026">2026</SelectItem>
+            <SelectItem value="2025">2025</SelectItem>
+            <SelectItem value="2024">2024</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
 
-          <Input
-            placeholder="Subject"
-            value={subject}
-            onChange={(e) => setSubject(e.target.value)}
-          />
+      <div className="space-y-1.5">
+        <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Type</label>
+        <Select onValueChange={setType} value={type}>
+          <SelectTrigger className="text-sm">
+            <SelectValue placeholder="Select type" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="CA1">CA1</SelectItem>
+            <SelectItem value="CA2">CA2</SelectItem>
+            <SelectItem value="Tutorial">Tutorial</SelectItem>
+            <SelectItem value="Practice">Practice</SelectItem>
+            <SelectItem value="Semester">Semester</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
 
-          <Input
+      <div className="space-y-1.5">
+        <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Subject</label>
+        <Input
+          className="text-sm"
+          placeholder="e.g. Data Structures"
+          value={subject}
+          onChange={(e) => setSubject(e.target.value)}
+        />
+      </div>
+
+      <div className="space-y-1.5">
+        <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">File</label>
+        <label className="flex flex-col items-center justify-center gap-2 border-2 border-dashed rounded-lg p-6 cursor-pointer hover:bg-muted/50 transition-colors">
+          <FileUp className="h-6 w-6 text-muted-foreground" />
+          <span className="text-sm text-muted-foreground">
+            {file ? file.name : "Click to select a PDF"}
+          </span>
+          <span className="text-xs text-muted-foreground/60">PDF only</span>
+          <input
             type="file"
             accept=".pdf"
+            className="hidden"
             onChange={(e) => setFile(e.target.files[0])}
           />
+        </label>
+      </div>
 
-        </div>
+    </div>
 
-        <DialogFooter>
-          <Button onClick={handleUpload} disabled={loading}>
-            {loading ? "Uploading..." : "Upload"}
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+    {/* Footer */}
+    <DialogFooter className="p-5 pt-0">
+      <Button
+        className="w-full gap-2"
+        onClick={handleUpload}
+        disabled={loading}
+      >
+        {loading ? (
+          <>
+            <Loader2 className="h-4 w-4 animate-spin" />
+            Uploading...
+          </>
+        ) : (
+          <>
+            <Upload className="h-4 w-4" />
+            Upload Paper
+          </>
+        )}
+      </Button>
+    </DialogFooter>
+
+  </DialogContent>
+</Dialog>
   )
 }

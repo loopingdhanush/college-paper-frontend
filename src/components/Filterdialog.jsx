@@ -49,64 +49,89 @@ export default function FilterDialog({ onApply }) {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button variant="outline">Filters</Button>
-      </DialogTrigger>
+  <DialogTrigger asChild>
+    <Button variant="outline" size="sm" className="gap-2">
+      
+      Filters
+    </Button>
+  </DialogTrigger>
 
-      <DialogContent className="sm:max-w-[400px]" aria-describedby={undefined}>
-        <DialogHeader>
-          <DialogTitle>Filter Papers</DialogTitle>
-        </DialogHeader>
+  <DialogContent className="sm:max-w-[380px] p-0 gap-0 overflow-hidden" aria-describedby={undefined}>
 
-        <div className="grid gap-4 py-4">
+    {/* Header */}
+    <DialogHeader className="p-5 border-b">
+      <DialogTitle className="text-sm font-semibold tracking-tight">Filter Papers</DialogTitle>
+    </DialogHeader>
 
-          <Select onValueChange={setDepartment}>
-            <SelectTrigger>
-              <SelectValue placeholder="Department" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="IT">IT</SelectItem>
-              <SelectItem value="CSE">CSE</SelectItem>
-            </SelectContent>
-          </Select>
+    {/* Fields */}
+    <div className="p-5 space-y-4">
 
-          <Select onValueChange={setYear}>
-            <SelectTrigger>
-              <SelectValue placeholder="Year" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="2026">2026</SelectItem>
-              <SelectItem value="2025">2025</SelectItem>
-              <SelectItem value="2024">2024</SelectItem>
-            </SelectContent>
-          </Select>
+      <div className="space-y-1.5">
+        <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Department</label>
+        <Select onValueChange={setDepartment} value={department}>
+          <SelectTrigger className="text-sm">
+            <SelectValue placeholder="Select department" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="IT">IT</SelectItem>
+            <SelectItem value="CSE">CSE</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
 
-          <Select onValueChange={setType}>
-            <SelectTrigger>
-              <SelectValue placeholder="Type" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="CA1">CA1</SelectItem>
-              <SelectItem value="CA2">CA2</SelectItem>
-              <SelectItem value="Tutorial">Tutorial</SelectItem>
-              <SelectItem value="Practice">Practice</SelectItem>
-              <SelectItem value="Semester">Semester</SelectItem>
-            </SelectContent>
-          </Select>
+      <div className="space-y-1.5">
+        <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Year</label>
+        <Select onValueChange={setYear} value={year}>
+          <SelectTrigger className="text-sm">
+            <SelectValue placeholder="Select year" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="2026">2026</SelectItem>
+            <SelectItem value="2025">2025</SelectItem>
+            <SelectItem value="2024">2024</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
 
-          <Input
-            placeholder="Subject"
-            value={subject}
-            onChange={(e) => setSubject(e.target.value)}
-          />
+      <div className="space-y-1.5">
+        <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Type</label>
+        <Select onValueChange={setType} value={type}>
+          <SelectTrigger className="text-sm">
+            <SelectValue placeholder="Select type" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="CA1">CA1</SelectItem>
+            <SelectItem value="CA2">CA2</SelectItem>
+            <SelectItem value="Tutorial">Tutorial</SelectItem>
+            <SelectItem value="Practice">Practice</SelectItem>
+            <SelectItem value="Semester">Semester</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
 
-        </div>
+      <div className="space-y-1.5">
+        <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Subject</label>
+        <Input
+          className="text-sm"
+          placeholder="e.g. Data Structures"
+          value={subject}
+          onChange={(e) => setSubject(e.target.value)}
+        />
+      </div>
 
-        <DialogFooter>
-          <Button onClick={handleApply}>Apply</Button>
-          <Button onClick={handleReset}>Reset Filter</Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+    </div>
+
+    {/* Footer */}
+    <DialogFooter className="p-5 pt-4 flex gap-2">
+      <Button variant="destructive" size="sm" className="flex-1" onClick={handleReset}>
+        Reset
+      </Button>
+      <Button size="sm" className="flex-1" onClick={handleApply}>
+        Apply Filters
+      </Button>
+    </DialogFooter>
+
+  </DialogContent>
+</Dialog>
   )
 }
