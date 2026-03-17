@@ -94,8 +94,23 @@ export default function UploadDialog() {
             <SelectValue placeholder="Select department" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="IT">IT</SelectItem>
+            <SelectItem value="AE">Automobile</SelectItem>
+            <SelectItem value="BE">Biomedical</SelectItem>
+            <SelectItem value="CE">Civil</SelectItem>
             <SelectItem value="CSE">CSE</SelectItem>
+            <SelectItem value="CSE_AI_ML">CSE (AI & ML)</SelectItem>
+            <SelectItem value="EEE">EEE</SelectItem>
+            <SelectItem value="ECE">ECE</SelectItem>
+            <SelectItem value="ICE">Instrumentation and Control</SelectItem>
+            <SelectItem value="ME">Mechanical</SelectItem>
+            <SelectItem value="MET">Metallurgical</SelectItem>
+            <SelectItem value="PE">Production</SelectItem>
+            <SelectItem value="RA">Robotics</SelectItem>
+            <SelectItem value="BT">Bio</SelectItem>
+            <SelectItem value="FT">Fashion</SelectItem>
+            <SelectItem value="IT">IT</SelectItem>
+            <SelectItem value="TT">Textile</SelectItem>
+            <SelectItem value="ME_S">Mechanical (Sandwich)</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -110,6 +125,9 @@ export default function UploadDialog() {
             <SelectItem value="2026">2026</SelectItem>
             <SelectItem value="2025">2025</SelectItem>
             <SelectItem value="2024">2024</SelectItem>
+            <SelectItem value="2024">2023</SelectItem>
+            <SelectItem value="2024">2022</SelectItem>
+            <SelectItem value="2024">2021</SelectItem>
           </SelectContent>
         </Select>
       </div>
