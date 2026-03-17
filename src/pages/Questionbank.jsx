@@ -9,7 +9,7 @@ import { Separator } from "@/components/ui/separator"
 import { Skeleton } from "@/components/ui/skeleton"
 import { BookOpen } from "lucide-react"
 
-export default function QuestionBank({admin}) {
+export default function Questionbank({admin}) {
   const navigate = useNavigate();
   const [papers, setPapers] = useState([])
   const [loading, setLoading] = useState(true)
