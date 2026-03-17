@@ -20,9 +20,8 @@ export default function allcourses({admin}) {
   const [loading, setLoading] = useState(true);
   const subject = searchParams.get("subject");
   const [filters, setFilters] = useState(subject?{subject}:{});
+  const [downloadingId, setDownloadingId] = useState(null);
   
-
-
   // Fetch papers
   const fetchPapers = async () => {
     try {
@@ -48,37 +47,40 @@ export default function allcourses({admin}) {
     
   }, [filters])
 
-const handleDownload = async (paper) => {
-  try {
-    const id = paper._id
-
-    const res = await api.get(`/papers/${id}/download`)
-    const fileURL = res.data.fileURL
-
-    const fileResponse = await fetch(fileURL)
-    const blob = await fileResponse.blob()
-
-    const fileName =
-      `${paper.department}_${paper.subject}_${paper.type}_${paper.year}`
-        .replace(/\s+/g, "_")
-        .toUpperCase() + ".pdf"
-
-    const blobUrl = window.URL.createObjectURL(blob)
-
-    const link = document.createElement("a")
-    link.href = blobUrl
-    link.setAttribute("download", fileName)
-
-    document.body.appendChild(link)
-    link.click()
-
-    document.body.removeChild(link)
-    window.URL.revokeObjectURL(blobUrl)
-
-  } catch (error) {
-    console.error(error)
-  }
-}
+  const handleDownload = async (paper) => {
+    try {
+      const id = paper._id;
+      setDownloadingId(id); // 👈 start loading
+  
+      const res = await api.get(`/papers/${id}/download`);
+      const fileURL = res.data.fileURL;
+  
+      const fileResponse = await fetch(fileURL);
+      const blob = await fileResponse.blob();
+  
+      const fileName =
+        `${paper.department}_${paper.subject}_${paper.type}_${paper.year}`
+          .replace(/\s+/g, "_")
+          .toUpperCase() + ".pdf";
+  
+      const blobUrl = window.URL.createObjectURL(blob);
+  
+      const link = document.createElement("a");
+      link.href = blobUrl;
+      link.setAttribute("download", fileName);
+  
+      document.body.appendChild(link);
+      link.click();
+  
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(blobUrl);
+  
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setDownloadingId(null); // 👈 stop loading
+    }
+  };
 
 const handleDelete = async (id) =>{
   try {
@@ -189,9 +191,19 @@ const handleDelete = async (id) =>{
                   variant="outline"
                   className="h-7 px-2.5 text-xs gap-1.5"
                   onClick={() => handleDownload(paper)}
+                  disabled={downloadingId === paper._id}
                 >
-                  <Download className="h-3 w-3" />
-                  Download
+                  {downloadingId === paper._id ? (
+                    <>
+                      <span className="h-3 w-3 border-2 border-gray-400 border-t-transparent rounded-full animate-spin"></span>
+                      Downloading...
+                    </>
+                  ) : (
+                    <>
+                      <Download className="h-3 w-3" />
+                      Download
+                    </>
+                  )}
                 </Button>
 
                 {admin && (
